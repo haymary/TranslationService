@@ -15,11 +15,11 @@ class YandexTranslator(ATranslator):
 		no_res = True
 		while no_res is True:
 			try:
-				res = requests.post(request)
+				translation = requests.post(request)
 				no_res = False
 			except requests.exceptions.ConnectionError as e:
 				pass
 			except Exception as e:
 				print(e)
 				return None
-		return res
+		return translation.json()['text'][0]

@@ -16,7 +16,7 @@ class TestYandexTranslator(unittest.TestCase):
 		translation = self.yt.translate(source, target, text)
 
 		if translation is not None:
-			print(translation.json())
+			print(translation)
 		else:
 			print("Error happened")
-		self.assertEqual('Note. All special characters must be escaped.', translation.json()['text'][0])
+		self.assertEqual('Note. All special characters must be escaped.', translation)
