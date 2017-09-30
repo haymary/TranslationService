@@ -1,5 +1,4 @@
 import unittest
-
 from src.translators.GoogleTranslator import GoogleTranslator
 
 

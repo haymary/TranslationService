@@ -5,11 +5,11 @@ from src.translators.ATranslator import ATranslator
 
 class GoogleTranslator(ATranslator):
 
-	def translate(self, source_lang, target_lang, text):
+	def translate(self, source_lang, source_text, target_lang):
 
 		translate_client = translate.Client()
 
 		translation = translate_client.translate(
-			text,
+			source_text,
 			target_language=target_lang)
 		return translation

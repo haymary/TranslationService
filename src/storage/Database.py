@@ -37,11 +37,12 @@ class Database:
 
 	def get_translation(self, source_lang, source_s, target_lang):
 		try:
-			return self.posts.find_one({source_lang: source_s, target_lang: {'$exists': True}})
+			post = self.posts.find_one({source_lang: source_s, target_lang: {'$exists': True}})
+			return post[target_lang]
 		except Exception as e:
 			return None
 
-	def clear_database(self):
+	def clear(self):
 		self.posts.delete_many({})
 
 	def remove_current_collection(self):

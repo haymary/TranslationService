@@ -5,5 +5,5 @@ class TranslationFacade:
 	def __init__(self):
 		self.translator = YandexTranslator()
 
-	def translate(self, source_lang, target_lang, text):
-		return self.translator.translate(source_lang, target_lang, text)
+	def translate(self, source_lang, source_text, target_lang):
+		return self.translator.translate(source_lang, source_text, target_lang)
