@@ -24,7 +24,7 @@ class TestTranslatorService(unittest.TestCase):
 		target_lang = 'ru'
 
 		translation = self.ts.translate(source_lang, source_text, target_lang)
-		translation_db = self.ts.db.get_translation(source_lang, source_text, target_lang)
+		translation_db = self.ts._db.get_translation(source_lang, source_text, target_lang)
 		self.assertEqual(translation, translation_db)
 
 	def test_data_saved_to_cache(self):
@@ -33,5 +33,5 @@ class TestTranslatorService(unittest.TestCase):
 		target_lang = 'ru'
 
 		translation = self.ts.translate(source_lang, source_text, target_lang)
-		translation_c = self.ts.cache.get_translation(source_lang, source_text, target_lang)
+		translation_c = self.ts._cache.get_translation(source_lang, source_text, target_lang)
 		self.assertEqual(translation, translation_c)

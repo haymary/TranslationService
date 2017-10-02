@@ -17,15 +17,15 @@ class TestCache(unittest.TestCase):
 
 	def test_to_cache_key(self):
 		(source_lang, source_text, target_lang, target_text) = self.test_set
-		h1 = self.cache.to_cache_key(source_text, target_lang)
-		h2 = self.cache.to_cache_key(source_text, target_lang)
+		h1 = self.cache._to_cache_key(source_text, target_lang)
+		h2 = self.cache._to_cache_key(source_text, target_lang)
 		self.assertEqual(h1, h2)
 
 	def test_saving(self):
 		(source_lang, source_text, target_lang, target_text) = self.test_set
-		h1 = self.cache.to_cache_key(source_text, target_lang)
-		self.cache.add(h1, target_text)
-		translation = self.cache.get(h1)
+		h1 = self.cache._to_cache_key(source_text, target_lang)
+		self.cache._add(h1, target_text)
+		translation = self.cache._get(h1)
 		self.assertEqual(target_text, translation)
 
 	def test_finding(self):
