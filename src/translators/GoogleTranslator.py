@@ -5,6 +5,11 @@ from src.translators.ATranslator import ATranslator
 
 class GoogleTranslator(ATranslator):
 
+	_api_key = ''
+
+	def __init__(self):
+		self.translate_client = translate.Client()
+
 	def translate(self, source_lang, source_text, target_lang):
 		"""
 		Translates given text using Google Translation API
@@ -13,10 +18,11 @@ class GoogleTranslator(ATranslator):
 		:param target_lang: Name of target language
 		:return: translation string if translation is possible, None otherwise
 		"""
-
-		translate_client = translate.Client()
-
-		translation = translate_client.translate(
-			source_text,
-			target_language=target_lang)
-		return translation
+		try:
+			translation = self.translate_client.translate(
+				source_text,
+				source_language=source_lang,
+				target_language=target_lang)
+		except Exception as e:
+			return None
+		return translation['translatedText']
