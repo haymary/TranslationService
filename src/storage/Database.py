@@ -24,9 +24,9 @@ class Database:
 	def add_translation(self, source_lang, source_text, target_lang, target_text):
 		"""
 		Adds translation to database
-		:param source_lang: Name of source language
+		:param source_lang: Code of source language
 		:param source_text: Text for translation
-		:param target_lang: Name of target language
+		:param target_lang: Code of target language
 		:param target_text: Translation
 		:return: True if operation was successful, False otherwise
 		"""
@@ -49,9 +49,9 @@ class Database:
 	def get_translation(self, source_lang, source_text, target_lang):
 		"""
 		Returns trnslation from database
-		:param source_lang: Name of source language
+		:param source_lang: Code of source language
 		:param source_text: Text for translation
-		:param target_lang: Name of target language
+		:param target_lang: Code of target language
 		:return: Translation if in db, None otherwise
 		"""
 		try:
@@ -59,6 +59,21 @@ class Database:
 			return post[target_lang]
 		except Exception as e:
 			return None
+
+	def get_translation_many(self, source_lang, source_text, not_translated_lang):
+		translations = []
+		for target_lang in not_translated_lang:
+			post = self._posts.find_one({source_lang: source_text, target_lang: {'$exists': True}})
+			if post is not None:
+				translations.append(post[target_lang])
+				break
+			translations.append(post)
+		for target_lang in not_translated_lang[len(translations):]:
+			if target_lang in post:
+				translations.append(post[target_lang])
+			else:
+				translations.append(None)
+		return translations
 
 	def clear(self):
 		"""
@@ -90,9 +105,9 @@ class Database:
 	def _get_post_if_exists(self, lang_1, text_1, lang_2, text_2):
 		"""
 		Looks for a post in db which has at least one pair (lang : text)
-		:param lang_1: Name of source language
+		:param lang_1: Code of source language
 		:param text_1: Text for translation
-		:param lang_2: Name of target language
+		:param lang_2: Code of target language
 		:param text_2: Translation
 		:return: post if in db, None otherwise
 		"""

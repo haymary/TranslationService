@@ -16,9 +16,9 @@ class Cache(AStorage):
 	def add_translation(self, source_lang, source_text, target_lang, target_text):
 		"""
 		Adds translation to cache
-		:param source_lang: Name of source language
+		:param source_lang: Code of source language
 		:param source_text: Text for translation
-		:param target_lang: Name of target language
+		:param target_lang: Code of target language
 		:param target_text: Translation
 		:return: True if operation was successful, False otherwise
 		"""
@@ -32,9 +32,9 @@ class Cache(AStorage):
 	def get_translation(self, source_lang, source_text, target_lang):
 		"""
 		Looks for translation in cache
-		:param source_lang: Name of source language
+		:param source_lang: Code of source language
 		:param source_text: Text for translation
-		:param target_lang: Name of target language
+		:param target_lang: Code of target language
 		:return: translation if in db, None otherwise
 		"""
 		return self._get(self._to_cache_key(source_text, target_lang))

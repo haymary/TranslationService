@@ -8,7 +8,6 @@ class TestYandexTranslator(unittest.TestCase):
 		self.yt = YandexTranslator()
 
 	def test_translation(self):
-		# The text to translate
 		text = 'Примечание. Все специальные символы должны быть экранированы.'
 		source = 'ru'
 		target = 'en'
@@ -27,5 +26,7 @@ class TestYandexTranslator(unittest.TestCase):
 		target = 'en'
 
 		translation = self.yt.translate(source, text, target)
+		print()
+		print(text)
 		print(translation)
 		self.assertNotEqual(translation, None)

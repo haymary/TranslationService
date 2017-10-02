@@ -11,9 +11,9 @@ class YandexTranslator(ATranslator):
 	def translate(self, source_lang, source_text, target_lang):
 		"""
 		Translates given text using Yandex Translation API
-		:param source_lang: Name of source language
+		:param source_lang: Code of source language
 		:param source_text: Text for translation
-		:param target_lang: Name of target language
+		:param target_lang: Code of target language
 		:return: translation string if translation is possible, None otherwise
 		"""
 		source_text = self._escape_special_chars(source_text)
@@ -35,11 +35,17 @@ class YandexTranslator(ATranslator):
 		return translation.json()['text'][0]
 
 	def _escape_special_chars(self, source_text):
-		return source_text.translate(str.maketrans({"-":  r"\-",
-                                          "]":  r"\]",
-                                          "\\": r"\\",
-                                          "^":  r"\^",
-                                          "$":  r"\$",
-                                          "*":  r"\*"}))
+		return source_text.translate(str.maketrans({
+			"-": r"\-",
+			"]": r"\]",
+			"\\": r"\\",
+			"^": r"\^",
+			"$": r"\$",
+			"*": r"\*",
+			"\"": r"\"",
+			"\'": r"\'",
+			"&": r"\&"
+		}))
+		# return source_text
 
 
