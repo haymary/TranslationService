@@ -68,6 +68,7 @@ class Database:
 				translations.append(post[target_lang])
 				break
 			translations.append(post)
+
 		for target_lang in not_translated_lang[len(translations):]:
 			if target_lang in post:
 				translations.append(post[target_lang])

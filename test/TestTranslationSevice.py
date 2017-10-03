@@ -6,6 +6,8 @@ import json
 class TestTranslatorService(unittest.TestCase):
 	def setUp(self):
 		self.ts = TranslatorService()
+		self.ts._cache.clear()
+		self.ts._db.clear()
 
 	def test_store_decrease_time(self):
 		text = 'Hello, My name is Maria'
@@ -54,4 +56,19 @@ class TestTranslatorService(unittest.TestCase):
 		target_text = 'Note. All special characters must be escaped.'
 		tr_json = {'source_lang': source_lang, 'source_text': source_text, 'target_langs': target_langs}
 		translations = json.loads(self.ts.translate_json(tr_json))
-		self.assertEqual(translations['translation'][0], 'Note. All special characters must be escaped.')
+		self.assertEqual(translations['translation'][0], target_text)
+
+	def test_translate_many_not_none(self):
+		req = {
+			"source_lang": "en",
+			"source_text": "Hello, My name is Maria",
+			"target_langs": [
+				"ru","it","ja","de","no","sk","ru","be","ca","cs","da","el","es","et","fi","fr","hu","lt","lv",
+				"mk",
+				"nl"
+			]
+		}
+		translations = json.loads(self.ts.translate_json(req))
+		print(translations)
+		for translation in translations['translation']:
+			self.assertNotEqual(translation, None)

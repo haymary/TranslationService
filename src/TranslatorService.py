@@ -1,5 +1,7 @@
 import json
 
+import time
+
 from src.storage.Cache import Cache
 from src.storage.Database import Database
 from src.translators.YandexTranslator import YandexTranslator
@@ -54,10 +56,13 @@ class TranslatorService:
 		:return: translations string if possible, None otherwise
 		"""
 		translations = self._check_in_storage_many(source_lang, source_text, target_langs)
-		for translation, target_lang in zip(translations, target_langs):
+		for i, translation in enumerate(translations):
 			if translation is None:
+				target_lang = target_langs[i]
+				time.sleep(2)
 				translation = self._tf.translate(source_lang, source_text, target_lang)
 				self._save_to_storage(source_lang, source_text, target_lang, translation)
+				translations[i] = translation
 		return translations
 
 	# ------- Private -------
@@ -95,16 +100,16 @@ class TranslatorService:
 		:param target_langs: Codes of target language
 		:return: translation string if exists, None otherwise
 		"""
-		if len(source_text) > self._max_saved_text: return None
-
 		translations = [None] * len(target_langs)
-		not_translated_ind, not_translated_lang = self.check_cache_many(source_lang, source_text,
-		                                                                              target_langs, translations)
 
-		if len(not_translated_lang) > 0:
-			translations_db = self._db.get_translation_many(source_lang, source_text, not_translated_lang)
-			for i, translation in zip(not_translated_ind, translations_db):
-				translations[i] = translation
+		if len(source_text) <= self._max_saved_text:
+			not_translated_ind, not_translated_lang = self.check_cache_many(source_lang, source_text,
+			                                                                              target_langs, translations)
+
+			if len(not_translated_lang) > 0:
+				translations_db = self._db.get_translation_many(source_lang, source_text, not_translated_lang)
+				for i, translation in zip(not_translated_ind, translations_db):
+					translations[i] = translation
 		return translations
 
 	def check_cache_many(self, source_lang, source_text, target_langs, translations):
