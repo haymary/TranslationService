@@ -40,7 +40,7 @@ class TestTranslatorService(unittest.TestCase):
 		source_lang = 'en'
 		source_text = 'Hello, My name is Maria'
 		target_langs = ['ru', 'it', 'ja']
-		tr_json = json.dumps({'source_lang':source_lang, 'source_text':source_text, 'target_langs':target_langs})
+		tr_json = {'source_lang':source_lang, 'source_text':source_text, 'target_langs':target_langs}
 		translations = json.loads(self.ts.translate_json(tr_json))
 		for tr in translations:
 			self.assertNotEqual(tr, None)
@@ -52,6 +52,6 @@ class TestTranslatorService(unittest.TestCase):
 		source_text = 'Примечание. Все специальные символы должны быть экранированы.'
 		target_langs = ['en']
 		target_text = 'Note. All special characters must be escaped.'
-		tr_json = json.dumps({'source_lang': source_lang, 'source_text': source_text, 'target_langs': target_langs})
+		tr_json = {'source_lang': source_lang, 'source_text': source_text, 'target_langs': target_langs}
 		translations = json.loads(self.ts.translate_json(tr_json))
 		self.assertEqual(translations['translation'][0], 'Note. All special characters must be escaped.')

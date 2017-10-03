@@ -32,6 +32,7 @@ class YandexTranslator(ATranslator):
 			except Exception as e:
 				print(e)
 				return None
+		# print(translation.json())
 		return translation.json()['text'][0]
 
 	def _escape_special_chars(self, source_text):

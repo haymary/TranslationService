@@ -20,7 +20,7 @@ class TranslatorService:
 		:return: JSON with fields (source_lang, source_text, target_lang, translation)
 		which contains result in translation field
 		"""
-		tr_json = json.loads(tr_json)
+		# tr_json = json.loads(tr_json)
 		source_lang, source_text, target_langs = tr_json['source_lang'], tr_json['source_text'], tr_json['target_langs']
 		if len(target_langs) == 1:
 			tr = self.translate(source_lang, source_text, target_langs[0])
