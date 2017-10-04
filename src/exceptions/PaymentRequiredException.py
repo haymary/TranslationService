@@ -1,0 +1,3 @@
+
+class PaymentRequiredException(Exception):
+	pass

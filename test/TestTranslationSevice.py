@@ -3,6 +3,9 @@ import unittest
 from src.TranslationService import TranslatorService
 import json
 
+from src.exceptions.ServiceUnavailableException import ServiceUnavailableException
+
+
 class TestTranslatorService(unittest.TestCase):
 	def setUp(self):
 		self.ts = TranslatorService()

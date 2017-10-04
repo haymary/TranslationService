@@ -1,5 +1,9 @@
 import json
 import time
+
+from src.exceptions.PaymentRequiredException import PaymentRequiredException
+from src.exceptions.ServiceUnavailableException import ServiceUnavailableException
+from src.exceptions.UnauthorizedException import UnauthorizedException
 from src.storage.Cache import Cache
 from src.storage.Database import Database
 from src.translators.YandexTranslator import YandexTranslator
@@ -21,7 +25,7 @@ class TranslatorService:
 		which contains result in translation field
 		"""
 		# tr_json = json.loads(tr_json)
-		if not self._can_translate(tr_json['user_info']): return [None]*len(tr_json['target_langs'])
+		self._can_translate(tr_json['user_info'])
 		source_lang, source_text, target_langs = tr_json['source_lang'], tr_json['source_text'], tr_json['target_langs']
 		if len(target_langs) == 1:
 			tr = self._translate(source_lang, source_text, target_langs[0])
@@ -42,7 +46,7 @@ class TranslatorService:
 		"""
 		translation = self._check_in_storage(source_lang, source_text, target_lang)
 		if translation is None:
-			translation = self._tf.translate(source_lang, source_text, target_lang)
+			translation = self._translate_online(source_lang, source_text, target_lang)
 			self._save_to_storage(source_lang, source_text, target_lang, translation)
 		return [translation]
 
@@ -60,10 +64,16 @@ class TranslatorService:
 			if translation is None:
 				target_lang = target_langs[i]
 				time.sleep(2)
-				translation = self._tf.translate(source_lang, source_text, target_lang)
+				translation = self._translate_online(source_lang, source_text, target_lang)
 				self._save_to_storage(source_lang, source_text, target_lang, translation)
 				translations[i] = translation
 		return translations
+
+	def _translate_online(self, source_lang, source_text, target_lang):
+		tr = self._tf.translate(source_lang, source_text, target_lang)
+		if tr is None:
+			raise ServiceUnavailableException
+		return tr
 
 	def _save_to_storage(self, source_lang, source_text, target_lang, translation):
 		"""
@@ -125,4 +135,8 @@ class TranslatorService:
 
 	def _can_translate(self, param):
 		# TODO
+		if False:
+			raise UnauthorizedException
+		if False:
+			raise PaymentRequiredException
 		return True
