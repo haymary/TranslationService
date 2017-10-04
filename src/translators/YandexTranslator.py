@@ -36,7 +36,7 @@ class YandexTranslator(ATranslator):
 		return translation.json()['text'][0]
 
 	def _escape_special_chars(self, source_text):
-		return source_text.translate(str.maketrans({
+		return source_text._translate(str.maketrans({
 			"-": r"\-",
 			"]": r"\]",
 			"\\": r"\\",

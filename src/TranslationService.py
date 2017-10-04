@@ -1,7 +1,5 @@
 import json
-
 import time
-
 from src.storage.Cache import Cache
 from src.storage.Database import Database
 from src.translators.YandexTranslator import YandexTranslator
@@ -23,15 +21,17 @@ class TranslatorService:
 		which contains result in translation field
 		"""
 		# tr_json = json.loads(tr_json)
+		if not self._can_translate(tr_json['user_info']): return [None]*len(tr_json['target_langs'])
 		source_lang, source_text, target_langs = tr_json['source_lang'], tr_json['source_text'], tr_json['target_langs']
 		if len(target_langs) == 1:
-			tr = self.translate(source_lang, source_text, target_langs[0])
+			tr = self._translate(source_lang, source_text, target_langs[0])
 		else:
-			tr = self.translate_many(source_lang, source_text, target_langs)
+			tr = self._translate_many(source_lang, source_text, target_langs)
 		tr_json['translation'] = tr
 		return json.dumps(tr_json)
 
-	def translate(self, source_lang, source_text, target_lang):
+	# ------- Private -------
+	def _translate(self, source_lang, source_text, target_lang):
 		"""
 		Translates given text. Looks for translation in local storage (memcached and db)
 		if nothing found looks in online translator
@@ -46,7 +46,7 @@ class TranslatorService:
 			self._save_to_storage(source_lang, source_text, target_lang, translation)
 		return [translation]
 
-	def translate_many(self, source_lang, source_text, target_langs):
+	def _translate_many(self, source_lang, source_text, target_langs):
 		"""
 		Translates given text. Looks for translation in local storage (memcached and db)
 		if nothing found looks in online translator
@@ -65,7 +65,6 @@ class TranslatorService:
 				translations[i] = translation
 		return translations
 
-	# ------- Private -------
 	def _save_to_storage(self, source_lang, source_text, target_lang, translation):
 		"""
 		Saves translation to local storage
@@ -103,8 +102,8 @@ class TranslatorService:
 		translations = [None] * len(target_langs)
 
 		if len(source_text) <= self._max_saved_text:
-			not_translated_ind, not_translated_lang = self.check_cache_many(source_lang, source_text,
-			                                                                              target_langs, translations)
+			not_translated_ind, not_translated_lang = self._check_cache_many(source_lang, source_text,
+			                                                                 target_langs, translations)
 
 			if len(not_translated_lang) > 0:
 				translations_db = self._db.get_translation_many(source_lang, source_text, not_translated_lang)
@@ -112,7 +111,7 @@ class TranslatorService:
 					translations[i] = translation
 		return translations
 
-	def check_cache_many(self, source_lang, source_text, target_langs, translations):
+	def _check_cache_many(self, source_lang, source_text, target_langs, translations):
 		not_translated_lang = []
 		not_translated_ind = []
 		for i, target_lang in enumerate(target_langs):
@@ -123,3 +122,7 @@ class TranslatorService:
 			else:
 				translations[i] = translation
 		return not_translated_ind, not_translated_lang
+
+	def _can_translate(self, param):
+		# TODO
+		return True

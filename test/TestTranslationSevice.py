@@ -1,6 +1,6 @@
 import time
 import unittest
-from src.TranslatorService import TranslatorService
+from src.TranslationService import TranslatorService
 import json
 
 class TestTranslatorService(unittest.TestCase):
@@ -15,7 +15,7 @@ class TestTranslatorService(unittest.TestCase):
 		times = []
 		for _ in range(2):
 			start = time.time()
-			t = self.ts.translate('en', 'ru', text)
+			t = self.ts._translate('en', 'ru', text)
 			end = time.time()
 			times.append(end-start)
 		self.assertLess(times[1], times[0])
@@ -25,7 +25,7 @@ class TestTranslatorService(unittest.TestCase):
 		source_text = 'Hello, My name is Maria'
 		target_lang = 'ru'
 
-		translation = self.ts.translate(source_lang, source_text, target_lang)
+		translation = self.ts._translate(source_lang, source_text, target_lang)
 		translation_db = self.ts._db.get_translation(source_lang, source_text, target_lang)
 		self.assertEqual(translation, translation_db)
 
@@ -34,7 +34,7 @@ class TestTranslatorService(unittest.TestCase):
 		source_text = 'Hello, My name is Maria'
 		target_lang = 'ru'
 
-		translation = self.ts.translate(source_lang, source_text, target_lang)
+		translation = self.ts._translate(source_lang, source_text, target_lang)
 		translation_c = self.ts._cache.get_translation(source_lang, source_text, target_lang)
 		self.assertEqual(translation, translation_c)
 
