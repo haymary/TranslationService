@@ -1,7 +1,5 @@
 import re
-
 import requests
-
 from src.translators.ATranslator import ATranslator
 
 

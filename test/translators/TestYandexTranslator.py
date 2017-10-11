@@ -5,14 +5,14 @@ from src.translators.YandexTranslator import YandexTranslator
 
 class TestYandexTranslator(unittest.TestCase):
 	def setUp(self):
-		self.yt = YandexTranslator()
+		self._translator = YandexTranslator()
 
 	def test_translation(self):
 		text = 'Примечание. Все специальные символы должны быть экранированы.'
 		source = 'ru'
 		target = 'en'
 
-		translation = self.yt.translate(source, text, target)
+		translation = self._translator.translate(source, text, target)
 
 		if translation is not None:
 			print(translation)
@@ -25,7 +25,7 @@ class TestYandexTranslator(unittest.TestCase):
 		source = 'ru'
 		target = 'en'
 
-		translation = self.yt.translate(source, text, target)
+		translation = self._translator.translate(source, text, target)
 		print()
 		print(text)
 		print(translation)

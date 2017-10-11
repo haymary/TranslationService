@@ -1,13 +1,15 @@
 from google.cloud import translate
 
+
 from src.translators.ATranslator import ATranslator
 
 
 class GoogleTranslator(ATranslator):
 
-	_api_key = ''
+	_api_key = 'AIzaSyD4gj1X_ndXYumI8ZcTq_h4xxQo7KT7QNQ'
 
 	def __init__(self):
+
 		self.translate_client = translate.Client()
 
 	def translate(self, source_lang, source_text, target_lang):
